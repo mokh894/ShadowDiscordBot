@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{layout}">
+
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-4">
+                    <h1 class="fw-bold mb-0">
+                        <i class="bi bi-speedometer2 text-primary me-3"></i>
+                        Dashboard
+                    </h1>
+                </div>
+                
+                <p class="lead text-muted mb-5">
+                    Select a server to manage its configuration and settings.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div th:if="${guilds != null and !guilds.empty}">
+                <div th:each="guild : ${guilds}" class="col-md-6 col-lg-4 mb-4">
+                    <div class="card guild-card h-100 shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start mb-3">
+                                <img th:if="${guild.iconUrl != null}" th:src="${guild.iconUrl}" 
+                                     th:alt="${guild.name}" class="rounded-circle me-3" width="48" height="48">
+                                <div th:unless="${guild.iconUrl != null}" class="bg-secondary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                    <i class="bi bi-discord text-white"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title fw-bold mb-1" th:text="${guild.name}">Server Name</h5>
+                                    <small class="text-muted">ID: <span th:text="${guild.id}">123456789</span></small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <span th:if="${guild.hasAdminPermissions()}" class="badge bg-danger mb-2">
+                                    <i class="bi bi-crown me-1"></i>Administrator
+                                </span>
+                                <span th:unless="${guild.hasAdminPermissions()}" class="badge bg-warning mb-2">
+                                    <i class="bi bi-gear me-1"></i>Manage Server
+                                </span>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <a th:href="@{/dashboard/{guildId}(guildId=${guild.id})}" class="btn btn-primary">
+                                    <i class="bi bi-gear me-2"></i>
+                                    Manage Server
+                                </a>
+                                <a th:href="@{/dashboard/{guildId}/antinuke(guildId=${guild.id})}" class="btn btn-outline-danger">
+                                    <i class="bi bi-shield-fill me-2"></i>
+                                    Anti-Nuke Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${guilds == null or guilds.empty}" class="col-12">
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">No Servers Available</h3>
+                    <p class="text-muted mb-4">
+                        You don't have administrator permissions in any servers where ShadowBot is present,
+                        or the bot hasn't been added to your servers yet.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#" class="btn btn-primary" target="_blank">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Invite ShadowBot
+                        </a>
+                        <a href="/oauth2/authorization/discord" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise me-2"></i>
+                            Refresh Permissions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

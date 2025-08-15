@@ -1,0 +1,13 @@
+{
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "prefix": "!",
+  "clientId": "YOUR_BOT_CLIENT_ID",
+  "clientSecret": "YOUR_BOT_CLIENT_SECRET",
+  "dashboard": {
+    "enabled": true,
+    "host": "localhost",
+    "port": 3000,
+    "baseUrl": "http://localhost:3000",
+    "sessionSecret": "your-session-secret-here"
+  }
+}

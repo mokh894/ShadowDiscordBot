@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ? ${title} + ' | ShadowBot' : 'ShadowBot Dashboard'">ShadowBot Dashboard</title>
+    
+    <!-- Local Dashboard CSS -->
+    <link href="/css/dashboard.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #5865f2;
+            --secondary-color: #4752c4;
+            --success-color: #57f287;
+            --danger-color: #ed4245;
+            --warning-color: #fee75c;
+            --dark-color: #2c2f33;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
+        .guild-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .guild-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .command-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+        }
+
+        .command-toggle:hover {
+            background: #e9ecef;
+        }
+
+        .command-info {
+            flex-grow: 1;
+        }
+
+        .command-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .command-description {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .form-switch .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+        }
+
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <i class="bi bi-shield-fill me-2 text-primary fs-4"></i>
+                <strong>ShadowBot</strong>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img th:src="'https://cdn.discordapp.com/avatars/' + ${#authentication.principal.attributes['id']} + '/' + ${#authentication.principal.attributes['avatar']} + '.png'" 
+                                 alt="Avatar" class="rounded-circle me-2" width="24" height="24">
+                            <span th:text="${#authentication.principal.attributes['username']}">Username</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/dashboard">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link btn btn-primary text-white px-3 rounded" href="/oauth2/authorization/discord">
+                            <i class="bi bi-discord me-1"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        <div id="message-container" class="message-container"></div>
+        <div layout:fragment="content">
+            <!-- Page content will be inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-shield-fill text-primary me-2"></i>
+                        <span>&copy; 2024 ShadowBot. All rights reserved.</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-muted">
+                        <i class="bi bi-shield-check text-success me-1"></i>
+                        Secure Discord Bot Management
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="/js/dashboard.js"></script>
+    
+    <script>
+        // Message handling
+        function showMessage(message, type = 'success') {
+            const messageContainer = document.getElementById('message-container');
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            messageContainer.appendChild(alertDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Form submission
+        function submitForm(formId, url, successMessage = 'Configuration saved successfully!') {
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const data = {};
+            
+            // Convert form data to object
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('[') && key.includes(']')) {
+                    // Handle nested objects like enabledCommands[help]
+                    const parts = key.split(/\[|\]/).filter(p => p);
+                    if (parts.length === 2) {
+                        if (!data[parts[0]]) data[parts[0]] = {};
+                        data[parts[0]][parts[1]] = value === 'on' ? true : value;
+                    }
+                } else {
+                    data[key] = value === 'on' ? true : value;
+                }
+            }
+            
+            // Handle checkboxes (unchecked boxes don't appear in FormData)
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (checkbox.name.includes('[') && checkbox.name.includes(']')) {
+                    const parts = checkbox.name.split(/\[|\]/).filter(p => p);
+                    if (parts.length === 2) {
+                        if (!data[parts[0]]) data[parts[0]] = {};
+                        if (!data[parts[0]][parts[1]]) {
+                            data[parts[0]][parts[1]] = false;
+                        }
+                    }
+                } else if (!data[checkbox.name]) {
+                    data[checkbox.name] = false;
+                }
+            });
+            
+            // Show loading state
+            const submitButton = form.querySelector('button[type="submit"], button[onclick*="submitForm"]');
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
+            submitButton.disabled = true;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage(data.message || successMessage, 'success');
+                } else {
+                    showMessage(data.message || 'An error occurred while saving.', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showMessage('An error occurred while saving the configuration.', 'danger');
+            })
+            .finally(() => {
+                submitButton.innerHTML = originalText;
+                submitButton.disabled = false;
+            });
+        }
+
+        // Command toggle functionality
+        function toggleCommand(commandName, checkbox) {
+            const isEnabled = checkbox.checked;
+            const commandRow = checkbox.closest('.command-toggle');
+            
+            if (isEnabled) {
+                commandRow.classList.add('border-success');
+                commandRow.classList.remove('border-danger');
+            } else {
+                commandRow.classList.add('border-danger');
+                commandRow.classList.remove('border-success');
+            }
+        }
+    </script>
+    
+    <div layout:fragment="scripts">
+        <!-- Page-specific scripts will be inserted here -->
+    </div>
+</body>
+</html>

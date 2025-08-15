@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout}">
+
+<div layout:fragment="content">
+    <!-- Hero Section -->
+    <section class="hero-section text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4">
+                            <i class="bi bi-shield-fill text-warning me-3"></i>
+                            ShadowBot Dashboard
+                        </h1>
+                        <p class="lead mb-4">
+                            Powerful Discord bot management with advanced anti-nuke protection, 
+                            customizable commands, and comprehensive server administration tools.
+                        </p>
+                        
+                        <div sec:authorize="isAuthenticated()">
+                            <a href="/dashboard" class="btn btn-light btn-lg px-4 me-3">
+                                <i class="bi bi-speedometer2 me-2"></i>
+                                Go to Dashboard
+                            </a>
+                        </div>
+                        
+                        <div sec:authorize="!isAuthenticated()">
+                            <a href="/oauth2/authorization/discord" class="btn btn-light btn-lg px-4 me-3">
+                                <i class="bi bi-discord me-2"></i>
+                                Login with Discord
+                            </a>
+                        </div>
+                        
+                        <a href="#features" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-arrow-down me-2"></i>
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image text-center">
+                        <div class="dashboard-preview bg-white rounded-3 shadow-lg p-4 mx-auto" style="max-width: 500px;">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-danger rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <div class="bg-warning rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <div class="bg-success rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <span class="text-muted small ms-auto">shadowbot.dashboard</span>
+                            </div>
+                            <div class="text-start">
+                                <div class="bg-light rounded p-3 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-shield-check text-success me-2"></i>
+                                        <strong class="text-dark">Anti-Nuke Protection</strong>
+                                        <span class="badge bg-success ms-auto">Active</span>
+                                    </div>
+                                </div>
+                                <div class="bg-light rounded p-3 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-gear text-primary me-2"></i>
+                                        <strong class="text-dark">Command Configuration</strong>
+                                        <span class="badge bg-primary ms-auto">24 Commands</span>
+                                    </div>
+                                </div>
+                                <div class="bg-light rounded p-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-graph-up text-warning me-2"></i>
+                                        <strong class="text-dark">Server Analytics</strong>
+                                        <span class="badge bg-warning ms-auto">Live</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="display-5 fw-bold mb-4">Powerful Features</h2>
+                    <p class="lead text-muted">
+                        Everything you need to manage your Discord server with confidence and control.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-shield-fill text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Anti-Nuke Protection</h4>
+                        <p class="text-muted">
+                            Advanced protection against mass deletions, role spam, and malicious attacks. 
+                            Configurable limits and instant response system.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-success bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-gear-fill text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Command Management</h4>
+                        <p class="text-muted">
+                            Enable, disable, and customize commands. Create aliases, set permissions, 
+                            and configure command behavior for your server.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-warning bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-graph-up-arrow text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Real-time Analytics</h4>
+                        <p class="text-muted">
+                            Monitor command usage, track violations, and view detailed logs. 
+                            Get insights into your server's activity and security.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-info bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-sliders text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Easy Configuration</h4>
+                        <p class="text-muted">
+                            Intuitive web interface for all bot settings. No need to remember complex 
+                            commands or syntax. Point, click, and configure.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-danger bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-lock-fill text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Secure Access</h4>
+                        <p class="text-muted">
+                            Discord OAuth2 authentication ensures only authorized users can access 
+                            your server's configuration. Role-based permissions.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card h-100 p-4 bg-white rounded-3 shadow-sm border-0">
+                        <div class="feature-icon bg-secondary bg-gradient rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="bi bi-lightning-fill text-white fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Fast & Reliable</h4>
+                        <p class="text-muted">
+                            Built for performance with instant response times. Reliable protection 
+                            that works 24/7 to keep your server safe and secure.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h3 class="fw-bold mb-2">Ready to secure your Discord server?</h3>
+                    <p class="mb-0 text-light opacity-75">
+                        Get started with ShadowBot dashboard and take control of your server management.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div sec:authorize="isAuthenticated()">
+                        <a href="/dashboard" class="btn btn-primary btn-lg">
+                            <i class="bi bi-speedometer2 me-2"></i>
+                            Open Dashboard
+                        </a>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a href="/oauth2/authorization/discord" class="btn btn-primary btn-lg">
+                            <i class="bi bi-discord me-2"></i>
+                            Get Started
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div layout:fragment="scripts">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .dashboard-preview {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</div>
+
+</html>
